@@ -24,7 +24,7 @@ class _TodayScreenState extends State<TodayScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GenTrack — Today'),
+       title: const Text('GenTrack — Today (Hot Reload)'),
       ),
       body: Center(
         child: Column(
