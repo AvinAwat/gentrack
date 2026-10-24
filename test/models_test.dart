@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gentrack/data/models/asset.dart';
 import 'package:gentrack/data/models/reading.dart';
 import 'package:gentrack/data/fake_reading_repo.dart';
+import 'package:gentrack/data/models/sync_state.dart' as sync_model;
+
 
 void main() {
   group('Asset tests', () {
@@ -145,5 +147,29 @@ timestamp: DateTime.now(),
 throwsStateError,
 );
 });
+group('SyncState model tests', () {
+    test('compares states by value and hashCode', () {
+      const first = sync_model.SyncState(
+        status: sync_model.SyncStatus.success,
+        message: 'Synced',
+      );
+
+      const second = sync_model.SyncState(
+        status: sync_model.SyncStatus.success,
+        message: 'Synced',
+      );
+
+      expect(first, equals(second));
+      expect(first.hashCode, equals(second.hashCode));
+
+      const different = sync_model.SyncState(
+        status: sync_model.SyncStatus.failed,
+        message: 'Synced',
+      );
+
+      expect(first, isNot(equals(different)));
+    });
+  });
+
 }
 
