@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:isolate';
 
 class TodayScreen extends StatefulWidget {
   const TodayScreen({super.key});
@@ -19,12 +20,45 @@ class _TodayScreenState extends State<TodayScreen> {
       }
     });
   }
+  void _simulateBlockingWorkOnUI() {
+  final stopwatch = Stopwatch()..start();
+  var value = 0;
+
+  while (stopwatch.elapsedMilliseconds < 3000) {
+    value++;
+  }
+
+  stopwatch.stop();
+
+  debugPrint(
+    'UI blocking work took ${stopwatch.elapsedMilliseconds} ms; value=$value',
+  );
+} 
+Future<void> _simulateBlockingWork() async {
+  final stopwatch = Stopwatch()..start();
+
+  final value = await Isolate.run(() {
+    var result = 0;
+
+    while (result < 100000000) {
+      result++;
+    }
+
+    return result;
+  });
+
+  stopwatch.stop();
+
+  debugPrint(
+    'Isolate work took ${stopwatch.elapsedMilliseconds} ms; value=$value',
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-       title: const Text('GenTrack — Today (Hot Reload)'),
+        title: const Text('GenTrack — Today (Hot Reload)'),
       ),
       body: Center(
         child: Column(
@@ -38,6 +72,16 @@ class _TodayScreenState extends State<TodayScreen> {
             Text('$_readings readings'),
             const SizedBox(height: 8),
             Text('$_faults faults reported'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _simulateBlockingWorkOnUI,
+              child: const Text('Test UI Blocking'),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: _simulateBlockingWork,
+              child: const Text('Test Isolate.run'),
+            ),
           ],
         ),
       ),
