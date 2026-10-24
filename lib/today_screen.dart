@@ -20,11 +20,12 @@ class _TodayScreenState extends State<TodayScreen> {
       }
     });
   }
-  void _simulateBlockingWorkOnUI() {
+ 
+void _simulateBlockingWorkOnUI() {
   final stopwatch = Stopwatch()..start();
   var value = 0;
 
-  while (stopwatch.elapsedMilliseconds < 3000) {
+  while (value < 100000000) {
     value++;
   }
 
@@ -33,7 +34,7 @@ class _TodayScreenState extends State<TodayScreen> {
   debugPrint(
     'UI blocking work took ${stopwatch.elapsedMilliseconds} ms; value=$value',
   );
-} 
+}
 Future<void> _simulateBlockingWork() async {
   final stopwatch = Stopwatch()..start();
 
